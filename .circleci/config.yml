@@ -1,0 +1,11 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+orbs:
+  docker: circleci/docker@1.7.0
+workflows:
+    build_and_push:
+      jobs:
+        - docker/publish:
+            image: hightouchio/multi-dbt 
+            tag: $CIRCLE_SHA1 
