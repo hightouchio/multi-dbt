@@ -3,7 +3,7 @@ FROM python:3.8-slim as base
 
 FROM base as builder
 
-ARG VERSIONS=0.18,0.19
+ARG VERSIONS=0.18,0.19,0.20
 
 WORKDIR /app
 COPY ./build.sh .
