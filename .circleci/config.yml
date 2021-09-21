@@ -3,28 +3,28 @@
 version: 2.1
 
 orbs:
-  docker: circleci/docker@1.7.0
   aws-cli: circleci/aws-cli@2.0.3
 
 jobs:
   build:
-    machine:
-      image: ubuntu-2004:202107-02
-      docker_layer_caching: true
+    docker:
+      - image: cimg/base:2021.04
     steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
       - checkout
       - aws-cli/install
       - run:
           name: Get ECR Credentials
-          command:  aws ecr get-login-password --region us-east-1 | \
-            docker login --username AWS --password-stdin ${AWS_ECR_ACCOUNT_URL}
-
-      - docker/build:
-          image: ${AWS_ECS_ACCOUNT_URL}/multi-dbt
-          tag: $CIRCLE_SHA1
-      - docker/push:
-          image: ${AWS_ECS_ACCOUNT_URL}/multi-dbt
-          tag: $CIRCLE_SHA1
+          command:  aws ecr get-login-password --region us-east-1 |
+            docker login --username AWS --password-stdin ${AWS_ECS_ACCOUNT_URL}
+      - run:
+          name: Build image
+          command: |
+            docker build -t ${AWS_ECR_ACCOUNT_URL}/multi-dbt:$CIRCLE_SHA1 .
+      - run:
+          name: Push image
+          command: docker push ${AWS_ECR_ACCOUNT_URL}/multi-dbt:$CIRCLE_SHA1
 
 workflows:
   version: 2
