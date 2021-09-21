@@ -9,7 +9,7 @@ orbs:
 jobs:
   build:
     machine:
-      image: ubunutu-2004:202104-01
+      image: ubuntu-2004:202107-02
       docker_layer_caching: true
     steps:
       - checkout
