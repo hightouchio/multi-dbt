@@ -17,7 +17,7 @@ do
     mkdir ./$FOLDER
 
     echo "Install dbt==$VERSION to folder $FOLDER"
-    python3 -m venv $FOLDER
+    python3 -m venv --copies $FOLDER
     source $FOLDER/bin/activate
     pip3 install dbt==$VERSION
 
